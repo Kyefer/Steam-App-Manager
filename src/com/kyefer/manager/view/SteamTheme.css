@@ -1,0 +1,27 @@
+.background {
+    -fx-background-color: #2a3f5a;
+}
+
+.label {
+    -fx-font-family: Motiva Sans, Arial, Helvetica, sans-serif;
+    -fx-text-fill: white;
+}
+
+.table-view {
+    -fx-base: #2a3f5a;
+    -fx-control-inner-background: #2a3f5a;
+    -fx-background-color: #2a3f5a;
+    -fx-table-cell-border-color: transparent;
+    -fx-table-header-border-color: transparent;
+    -fx-padding: 5;
+}
+
+.split-pane:horizontal > .split-pane-divider {
+    -fx-border-color: transparent #2a3f5a transparent #2a3f5a;
+    -fx-background-color: transparent, derive(#2a3f5a,20%);
+}
+
+.menu-bar .label {
+   -fx-text-fill: black;
+}
+
