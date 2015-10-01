@@ -12,5 +12,7 @@
 hs_err_pid*
 
 # IntelliJ specifics
-.idea
+.idea/*
+*.iml
 out/
+!/.idea/libraries/
