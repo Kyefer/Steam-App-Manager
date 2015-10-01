@@ -31,7 +31,7 @@
 }
 
 .table-row-cell:focused{
-    -fx-background-insets: 0 ;
+    -fx-background-insets: 0;
 }
 
 .table-view {
