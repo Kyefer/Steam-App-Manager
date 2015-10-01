@@ -3,7 +3,7 @@
 }
 
 
-.label {
+.label, .table-row-cell {
     -fx-font-family: Motiva Sans, Arial, Helvetica, sans-serif;
     -fx-text-fill: white;
 }
@@ -19,6 +19,7 @@
 
 .table-row-cell {
     -fx-text-background-color: white;
+    -fx-faint-focus-color: transparent;
 }
 
 .table-row-cell:odd {
@@ -29,9 +30,8 @@
     -fx-background-color: derive(#2a3f5a,20%);
 }
 
-.table-row-cell:focused:filled .text{
-    -fx-focus-color:transparent;
-    -fx-text-background-color: red;
+.table-row-cell:focused{
+    -fx-background-insets: 0 ;
 }
 
 .table-view {
