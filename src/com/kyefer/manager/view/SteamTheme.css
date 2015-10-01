@@ -2,9 +2,36 @@
     -fx-background-color: #2a3f5a;
 }
 
+
 .label {
     -fx-font-family: Motiva Sans, Arial, Helvetica, sans-serif;
     -fx-text-fill: white;
+}
+
+.label-header {
+    -fx-font-size: 20px;
+}
+
+.label-grid {
+    -fx-padding: 4px;
+    -fx-font-size: 14px;
+}
+
+.table-row-cell {
+    -fx-text-background-color: white;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: -fx-table-cell-border-color, -fx-table-cell-border-color;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: derive(#2a3f5a,20%);
+}
+
+.table-row-cell:focused:filled .text{
+    -fx-focus-color:transparent;
+    -fx-text-background-color: red;
 }
 
 .table-view {

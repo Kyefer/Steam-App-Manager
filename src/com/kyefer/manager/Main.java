@@ -1,6 +1,7 @@
 package com.kyefer.manager;
 
 import com.kyefer.manager.model.Game;
+import com.kyefer.manager.util.SteamUtil;
 import com.kyefer.manager.view.GameOverviewController;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -8,6 +9,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -18,6 +20,24 @@ public class Main extends Application {
 
     private Stage primaryStage;
     private BorderPane rootLayout;
+
+    private ObservableList<Game> gameData = FXCollections.observableArrayList();
+
+    public Main() {
+        try {
+            //sven = 76561198059300359
+            //dan = 76561198051501091
+            gameData.addAll(SteamUtil.getGamesByID("76561198059300359"));
+        } catch (IOException e) {
+
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Connection Error");
+            alert.setHeaderText("No connection");
+            alert.setContentText("Could not connect to the internet");
+
+            alert.showAndWait();
+        }
+    }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -48,30 +68,34 @@ public class Main extends Application {
         }
     }
 
-    private void initRootLayout() {try {
-        // Load root layout from fxml file.
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(Main.class.getResource("view/RootLayout.fxml"));
-        rootLayout = (BorderPane) loader.load();
+    private void initRootLayout() {
+        try {
+            // Load root layout from fxml file.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(Main.class.getResource("view/RootLayout.fxml"));
+            rootLayout = (BorderPane) loader.load();
 
-        // Show the scene containing the root layout.
-        Scene scene = new Scene(rootLayout);
-        primaryStage.setScene(scene);
-        primaryStage.show();
-    } catch (IOException e) {
-        e.printStackTrace();
+            // Show the scene containing the root layout.
+            Scene scene = new Scene(rootLayout);
+            primaryStage.setScene(scene);
+            primaryStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
-    }
 
 
-    public ObservableList<Game> getPersonData() {
+    public ObservableList<Game> getGameData() {
+
+        return gameData;/*
         ObservableList<Game> gameList = FXCollections.observableArrayList();
         Game tf2 = new Game("Team Fortress 2");
         tf2.addGenre("Multiplayer");
         tf2.addGenre("Free To Play");
         tf2.addGenre("Shooter");
         gameList.add(tf2);
-        return gameList;
+        gameList.add(new Game("CSGO"));
+        return gameList;*/
     }
 
     public static void main(String[] args) {
