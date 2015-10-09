@@ -28,7 +28,6 @@ public class SteamUtil {
 
     private static final String STEAM_KEY = "83EDD98AD612EAD6AA92695C2A548553";
 
-
     public static List<Game> getGamesByID(String id64) throws IOException{
         if (!id64.toUpperCase().matches("[0-9]{17}"))
             throw new IllegalArgumentException("ID must be a 17 digit number");
@@ -80,7 +79,7 @@ public class SteamUtil {
                 } catch (IOException e) {
                     Alert alert = new Alert(Alert.AlertType.WARNING);
                     alert.setTitle("App Error");
-                    alert.setHeaderText("Error getting data");
+                    alert.setHeaderText(null);
                     alert.setContentText("Could not load data for app with id " + appid);
 
                     alert.showAndWait();
@@ -90,8 +89,7 @@ public class SteamUtil {
         } catch (JSONException ignored) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Steam Error");
-            alert.setHeaderText("Error loading Steam Data");
-            alert.setContentText("Steam has given a broken reply");
+            alert.setContentText("Error loading data -Steam has given a broken reply");
 
             alert.showAndWait();
 

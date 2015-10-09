@@ -4,6 +4,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -31,6 +32,7 @@ public class Game {
     }
 
     public List<String> getGenres(){
+        Collections.sort(genres);
         return genres;
     }
 }

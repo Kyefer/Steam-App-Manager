@@ -43,6 +43,22 @@
     -fx-padding: 5;
 }
 
+.thumb {
+    -fx-border-radius: 3px;
+    -fx-background-color: #c6d4df;
+}
+
+.scroll-bar {
+    -fx-background-color: transparent;
+}
+
+.track {
+}
+
+.increment, .decrement {
+
+}
+
 .split-pane:horizontal > .split-pane-divider {
     -fx-border-color: transparent #2a3f5a transparent #2a3f5a;
     -fx-background-color: transparent, derive(#2a3f5a,20%);

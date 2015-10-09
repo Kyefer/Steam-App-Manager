@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane minWidth="-Infinity" prefHeight="125.0" prefWidth="391.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.kyefer.manager.view.ProfileRetrieverController">
+   <children>
+      <TextField fx:id="steamIDField" layoutX="101.0" layoutY="26.0" prefHeight="25.0" prefWidth="281.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="28.0" />
+      <Label layoutX="28.0" layoutY="30.0" prefHeight="17.0" prefWidth="57.0" text="Steam ID:" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="30.0" />
+      <ButtonBar layoutX="177.0" layoutY="78.0" prefHeight="40.0" prefWidth="200.0">
+        <buttons>
+          <Button mnemonicParsing="false" onAction="#handleOk" text="OK" />
+            <Button mnemonicParsing="false" onAction="#handleCancel" text="Cancel" />
+        </buttons>
+      </ButtonBar>
+   </children>
+</AnchorPane>

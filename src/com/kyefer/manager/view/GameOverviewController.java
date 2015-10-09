@@ -2,6 +2,11 @@ package com.kyefer.manager.view;
 
 import com.kyefer.manager.Main;
 import com.kyefer.manager.model.Game;
+import com.kyefer.manager.model.Profile;
+import javafx.collections.ObservableArray;
+import javafx.collections.ObservableList;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
@@ -21,7 +26,7 @@ public class GameOverviewController {
     @FXML
     private GridPane genreGrid;
 
-    private Main main;
+    private Profile profile;
 
 
     public GameOverviewController() {
@@ -35,10 +40,28 @@ public class GameOverviewController {
         gameTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> showGenres(newValue));
     }
 
-    public void setMainApp(Main main) {
-        this.main = main;
+    public void setProfile(Profile profile) {
+        this.profile = profile;
+        if (profile.getSteamID() != null) {
+            profile.addAllGamesFromSteam();
+            showGenres(null);
+            gameTable.setItems(profile.getGames());
+        }
 
-        gameTable.setItems(main.getGameData());
+        Service loadGames = new Service<Void>() {
+            @Override
+            protected Task<Void> createTask() {
+                return new Task<Void>() {
+                    @Override
+                    protected Void call() throws Exception {
+                        return null;
+                    }
+                };
+            }
+        };
+        loadGames.start();
+
+
     }
 
     private void showGenres(Game game) {
