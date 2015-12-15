@@ -1,9 +1,7 @@
 package com.kyefer.manager.view;
 
-import com.kyefer.manager.model.Profile;
+import com.kyefer.manager.model.SteamProfile;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -17,7 +15,7 @@ public class ProfileRetrieverController {
 
     private Stage dialogStage;
     private boolean okClicked = false;
-    private Profile profile;
+    private SteamProfile profile;
 
     public void setDialogStage(Stage dialogStage) {
         this.dialogStage = dialogStage;
@@ -30,7 +28,7 @@ public class ProfileRetrieverController {
     @FXML
     private void handleOk(){
         if (isInputValid()){
-            profile.setSteamID(steamIDField.getText());
+            //profile.setSteamID(steamIDField.getText());
 
             okClicked = true;
             dialogStage.close();
@@ -42,8 +40,11 @@ public class ProfileRetrieverController {
         dialogStage.close();
     }
 
-    public void setProfile(Profile profile){
+    public void setProfile(SteamProfile profile){
         this.profile = profile;
+//        if (profile.getSteamID().equals(SteamProfile.EMPTY_PROFILE)){
+//            steamIDField.setDisable(true);
+//        }
     }
 
     private boolean isInputValid(){

@@ -1,19 +1,12 @@
 package com.kyefer.manager.view;
 
-import com.kyefer.manager.Main;
 import com.kyefer.manager.model.Game;
-import com.kyefer.manager.model.Profile;
-import javafx.collections.ObservableArray;
-import javafx.collections.ObservableList;
-import javafx.concurrent.Service;
-import javafx.concurrent.Task;
+import com.kyefer.manager.model.SteamProfile;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TableColumn;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
-
-import javax.xml.soap.Node;
 
 
 public class GameOverviewController {
@@ -26,42 +19,32 @@ public class GameOverviewController {
     @FXML
     private GridPane genreGrid;
 
-    private Profile profile;
+    @FXML
+    private ScrollPane scrollPane;
 
-
-    public GameOverviewController() {
-    }
+    private SteamProfile profile;
 
     @FXML
     private void initialize() {
-        nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
-        showGenres(null);
-
+        gameTable.setPlaceholder(new Label("No games to display"));
+        nameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
         gameTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> showGenres(newValue));
+        showGenres(null);
     }
 
-    public void setProfile(Profile profile) {
+    public void startLoading(){
+        gameTable.setItems(FXCollections.emptyObservableList());
+        ProgressIndicator progressIndicator = new ProgressIndicator(-1);
+        progressIndicator.setMaxSize(30,30);
+        gameTable.setPlaceholder(progressIndicator);
+    }
+
+    public void loadProfile(SteamProfile profile) {
         this.profile = profile;
-        if (profile.getSteamID() != null) {
-            profile.addAllGamesFromSteam();
-            showGenres(null);
-            gameTable.setItems(profile.getGames());
+        if (profile != null) {
+            gameTable.setItems(FXCollections.observableArrayList(profile.getGames()));
         }
-
-        Service loadGames = new Service<Void>() {
-            @Override
-            protected Task<Void> createTask() {
-                return new Task<Void>() {
-                    @Override
-                    protected Void call() throws Exception {
-                        return null;
-                    }
-                };
-            }
-        };
-        loadGames.start();
-
-
+        gameTable.setPlaceholder(new Label("No games to display"));
     }
 
     private void showGenres(Game game) {
@@ -69,7 +52,7 @@ public class GameOverviewController {
         if (game != null) {
             nameLabel.setText(game.getName());
             int row = 0;
-            for (String genre : game.getGenres()) {
+            for (String genre : game.getGenresNames()) {
                 Label genreLabel = new Label(genre);
                 genreLabel.getStyleClass().add("label-grid");
                 genreGrid.add(genreLabel, 0, row++);

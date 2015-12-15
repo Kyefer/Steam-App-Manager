@@ -1,37 +1,33 @@
 package com.kyefer.manager.model;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Eddie on 9/30/2015.
  */
 public class Game {
-    private final StringProperty nameProperty;
+    private String name;
     private List<String> genres;
 
-    public Game(String name){
-        nameProperty = new SimpleStringProperty(name);
-        genres = new ArrayList<>();
+    /**
+     * Constructs a Game object that organizes all the genres of the game
+     *
+     * @param name the name of the game
+     */
+    public Game(String name) {
+        this.name = name;
+        this.genres = new ArrayList<>();
     }
 
-    public String getName(){
-        return nameProperty.get();
+    public String getName() {
+        return name;
     }
 
-    public StringProperty nameProperty() {
-        return nameProperty;
-    }
-
-    public void addGenre(String genre){
+    public void addGenre(String genre) {
         genres.add(genre);
     }
 
-    public List<String> getGenres(){
+    public List<String> getGenresNames() {
         Collections.sort(genres);
         return genres;
     }

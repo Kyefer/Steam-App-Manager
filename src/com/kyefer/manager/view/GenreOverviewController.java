@@ -1,15 +1,15 @@
 package com.kyefer.manager.view;
 
 import com.kyefer.manager.model.Game;
-import com.kyefer.manager.model.Profile;
+import com.kyefer.manager.model.Genre;
+import com.kyefer.manager.model.SteamProfile;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Service;
-import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.GridPane;
@@ -27,8 +27,7 @@ public class GenreOverviewController {
     @FXML
     private GridPane gameGrid;
 
-    private Profile profile;
-    private ObservableList<Genre> genres;
+    private SteamProfile profile;
 
 
     public GenreOverviewController() {
@@ -36,34 +35,28 @@ public class GenreOverviewController {
 
     @FXML
     private void initialize() {
-        nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
-        showGames(null);
-
+        genreTable.setPlaceholder(new Label("No genres to display"));
+        nameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
         genreTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> showGames(newValue));
+
+        showGames(null);
     }
 
-    public void setProfile(Profile profile) {
+    public void startLoading() {
+        genreTable.setItems(FXCollections.emptyObservableList());
+        ProgressIndicator progressIndicator = new ProgressIndicator(-1);
+        progressIndicator.setMaxSize(30, 30);
+        genreTable.setPlaceholder(progressIndicator);
+    }
+
+    public void loadProfile(SteamProfile profile) {
         this.profile = profile;
-        genres = FXCollections.observableArrayList();
-        if (profile.getSteamID() != null) {
-            profile.addAllGamesFromSteam();
+        if (profile != null) {
             showGames(null);
+            profile.generateGenres();
+            genreTable.setItems(FXCollections.observableArrayList(profile.getGenres()));
+            genreTable.setPlaceholder(new Label("No genres to display"));
         }
-
-        for (Game game : profile.getGames()) {
-            for (String genreString : game.getGenres()) {
-                Optional<Genre> genreOptional = genres.stream().filter(genre -> genre.getName().equals(genreString)).findFirst();
-                if (genreOptional.isPresent())
-                    genreOptional.get().addGame(game);
-                else {
-                    Genre newGenre = new Genre(genreString);
-                    newGenre.addGame(game);
-                    genres.add(newGenre);
-                }
-            }
-        }
-        genreTable.setItems(genres);
-
     }
 
     private void showGames(Genre genre) {
@@ -79,32 +72,5 @@ public class GenreOverviewController {
         } else {
             nameLabel.setText("");
         }
-    }
-}
-
-class Genre {
-    private StringProperty nameProperty;
-    private ArrayList<Game> games;
-
-    public Genre(String name) {
-        nameProperty = new SimpleStringProperty(name);
-        games = new ArrayList<>();
-    }
-
-    public StringProperty nameProperty() {
-        return nameProperty;
-    }
-
-    public String getName() {
-        return nameProperty.get();
-    }
-
-    public List<Game> getGames() {
-        Collections.sort(games, (g1, g2) -> g1.getName().compareToIgnoreCase(g2.getName()));
-        return games;
-    }
-
-    public void addGame(Game newGame) {
-        games.add(newGame);
     }
 }
