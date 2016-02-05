@@ -8,13 +8,11 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressIndicator;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 public class GenreOverviewController {
@@ -26,6 +24,10 @@ public class GenreOverviewController {
     private Label nameLabel;
     @FXML
     private GridPane gameGrid;
+    @FXML
+    private Label minLabel;
+    @FXML
+    private Slider minSlider;
 
     private SteamProfile profile;
 
@@ -40,6 +42,8 @@ public class GenreOverviewController {
         genreTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> showGames(newValue));
 
         showGames(null);
+
+        minSlider.valueProperty().addListener((observable, oldValue, newValue) -> {minLabel.setText(String.valueOf(newValue.intValue()));loadGenres();});
     }
 
     public void startLoading() {
@@ -52,11 +56,40 @@ public class GenreOverviewController {
     public void loadProfile(SteamProfile profile) {
         this.profile = profile;
         if (profile != null) {
+            minSlider.setMax(profile.getGenres().size());
+            minSlider.setMajorTickUnit(profile.getGenres().size()/4);
+            minSlider.setMinorTickCount(profile.getGenres().size()/16);
+            minSlider.setBlockIncrement(1);
+
             showGames(null);
             profile.generateGenres();
-            genreTable.setItems(FXCollections.observableArrayList(profile.getGenres()));
-            genreTable.setPlaceholder(new Label("No genres to display"));
+            loadGenres();
         }
+    }
+
+    private void loadGenres() {
+        List<Genre> validGenres = new ArrayList<>();
+        List<Game> potentialNoGenreGames = new ArrayList<>();
+        List<Game> hasAGenre = new ArrayList<>();
+
+        for (Genre genre : profile.getGenres()) {
+            if (genre.getGames().size() >= Integer.parseInt(minLabel.getText())) {
+                validGenres.add(genre);
+                genre.getGames().forEach(hasAGenre::add);
+            } else {
+                genre.getGames().forEach(potentialNoGenreGames::add);
+            }
+        }
+
+        Genre noGenre = new Genre("NO GENRE");
+        potentialNoGenreGames.stream().filter(game -> !hasAGenre.contains(game)).forEach(noGenre::addGame);
+
+        if (noGenre.getGames().size() > 0) {
+            validGenres.add(noGenre);
+        }
+
+        genreTable.setItems(FXCollections.observableArrayList(validGenres));
+
     }
 
     private void showGames(Genre genre) {
@@ -72,5 +105,11 @@ public class GenreOverviewController {
         } else {
             nameLabel.setText("");
         }
+    }
+
+    @FXML
+    public void onMinSliderDropped() {
+        System.out.println("Dropped");
+        loadGenres();
     }
 }

@@ -31,4 +31,8 @@ public class Game {
         Collections.sort(genres);
         return genres;
     }
+
+    public String toString(){
+        return String.format("Game[name=%s]", name);//, genres=%s]", name, Arrays.toString(genres.toArray()));
+    }
 }
