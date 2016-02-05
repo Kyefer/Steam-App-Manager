@@ -11,9 +11,9 @@
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
-              <MenuItem mnemonicParsing="false" onAction="#newProfile" text="New Profile..." />
-                  <MenuItem mnemonicParsing="false" onAction="#openProfile" text="Open Profile" />
-                  <MenuItem fx:id="saveAsItem" mnemonicParsing="false" onAction="#saveProfile" text="Save As" />
+              <MenuItem mnemonicParsing="false" onAction="#handleNewProfile" text="New Profile" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleOpenProfile" text="Open Profile" />
+                  <MenuItem fx:id="saveAsItem" mnemonicParsing="false" onAction="#handelSaveAsProfile" text="Save As" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="View">

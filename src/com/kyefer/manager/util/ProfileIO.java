@@ -20,7 +20,7 @@ public class ProfileIO {
     private static final String GAME_GENRE_DELIMINATOR = "=";
     private static final String GENRE_DELIMINATOR = "~";
 
-    public static SteamProfile loadProfile(File file) throws IOException {
+    public static SteamProfile openProfile(File file) throws IOException {
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line = br.readLine();
             SteamProfile profile = new SteamProfile(line);

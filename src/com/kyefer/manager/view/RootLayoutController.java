@@ -38,7 +38,7 @@ public class RootLayoutController {
     private Pane profileOverview;
 
     @FXML
-    private void initialize() {
+    public void initialize() {
 
         profile = null;
         saveAsItem.setDisable(true);
@@ -67,7 +67,7 @@ public class RootLayoutController {
     }
 
     @FXML
-    private void newProfile() {
+    public void handleNewProfile() {
         TextInputDialog dialog = new TextInputDialog("steamid");
         dialog.setTitle("New SteamProfile");
         dialog.setHeaderText(null);
@@ -81,7 +81,7 @@ public class RootLayoutController {
     }
 
     @FXML
-    public void openProfile() {
+    public void handleOpenProfile() {
         FileChooser fileChooser = new FileChooser();
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
         fileChooser.getExtensionFilters().add(extFilter);
@@ -91,14 +91,14 @@ public class RootLayoutController {
         File file = fileChooser.showOpenDialog(rootLayout.getScene().getWindow());
         try {
             if (file != null)
-            loadProfile(ProfileIO.loadProfile(file), false);
+            loadProfile(ProfileIO.openProfile(file), false);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     @FXML
-    public void saveProfile() {
+    public void handelSaveAsProfile() {
         FileChooser fileChooser = new FileChooser();
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
         fileChooser.getExtensionFilters().add(extFilter);
@@ -167,7 +167,7 @@ public class RootLayoutController {
 
             ProfileRetrieverController controller = loader.getController();
             controller.setDialogStage(dialogStage);
-            controller.loadProfile(profile);
+            controller.openProfile(profile);
 
             // Show the dialog and wait until the user closes it
             dialogStage.showAndWait();
