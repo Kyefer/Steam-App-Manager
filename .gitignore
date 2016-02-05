@@ -46,3 +46,4 @@ crashlytics.properties
 crashlytics-build.properties
 
 src/com/kyefer/manager/resources/id_list.txt
+/profiles

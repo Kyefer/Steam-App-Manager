@@ -2,17 +2,21 @@ package com.kyefer.manager.view;
 
 import com.kyefer.manager.Main;
 import com.kyefer.manager.model.SteamProfile;
+import com.kyefer.manager.util.ProfileIO;
 import com.kyefer.manager.util.SteamUtil;
 import javafx.application.Platform;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.stage.FileChooser;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -24,6 +28,9 @@ public class RootLayoutController {
     @FXML
     private BorderPane rootLayout;
 
+    @FXML
+    private MenuItem saveAsItem;
+
     private SteamProfile profile;
     private GameOverviewController gameOverviewController;
     private GenreOverviewController genreOverviewController;
@@ -33,10 +40,8 @@ public class RootLayoutController {
     @FXML
     private void initialize() {
 
-//        String defaultID = "";
-//        profile = new SteamProfile(defaultID);
-
         profile = null;
+        saveAsItem.setDisable(true);
         try {
             FXMLLoader gameLoader = new FXMLLoader();
             gameLoader.setLocation(Main.class.getResource("view/GenreOverview.fxml"));
@@ -62,7 +67,7 @@ public class RootLayoutController {
     }
 
     @FXML
-    private void handleNewProfile() {
+    private void newProfile() {
         TextInputDialog dialog = new TextInputDialog("steamid");
         dialog.setTitle("New SteamProfile");
         dialog.setHeaderText(null);
@@ -71,26 +76,63 @@ public class RootLayoutController {
         Optional<String> result = dialog.showAndWait();
         if (result.isPresent() && result.get().matches("\\d{17}")) {
             SteamProfile newProfile = new SteamProfile(result.get());
-
-            gameOverviewController.startLoading();
-            genreOverviewController.startLoading();
-
-            new Service<Void>() {
-                @Override
-                protected Task<Void> createTask() {
-                    return new Task<Void>() {
-                        @Override
-                        protected Void call() throws Exception {
-                            SteamUtil.loadGames(newProfile);
-                            Platform.runLater(()-> gameOverviewController.loadProfile(newProfile));
-                            Platform.runLater(()-> genreOverviewController.loadProfile(newProfile));
-                            return null;
-                        }
-                    };
-                }
-            }.start();
-            profile = newProfile;
+            loadProfile(newProfile, true);
         }
+    }
+
+    @FXML
+    public void openProfile() {
+        FileChooser fileChooser = new FileChooser();
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+        fileChooser.getExtensionFilters().add(extFilter);
+        fileChooser.setTitle("Open Profile");
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
+
+        File file = fileChooser.showOpenDialog(rootLayout.getScene().getWindow());
+        try {
+            if (file != null)
+            loadProfile(ProfileIO.loadProfile(file), false);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void saveProfile() {
+        FileChooser fileChooser = new FileChooser();
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+        fileChooser.getExtensionFilters().add(extFilter);
+        fileChooser.setTitle("Save Profile");
+        fileChooser.setInitialFileName(profile.getUsername());
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
+
+        File file = fileChooser.showSaveDialog(rootLayout.getScene().getWindow());
+        ProfileIO.saveProfile(file, profile);
+
+    }
+
+    private void loadProfile(SteamProfile profile, boolean loadFromSteam) {
+        gameOverviewController.startLoading();
+        genreOverviewController.startLoading();
+
+        new Service<Void>() {
+            @Override
+            protected Task<Void> createTask() {
+                return new Task<Void>() {
+                    @Override
+                    protected Void call() throws Exception {
+                        if (loadFromSteam)
+                            SteamUtil.loadGames(profile);
+                        Platform.runLater(() -> gameOverviewController.loadProfile(profile));
+                        Platform.runLater(() -> genreOverviewController.loadProfile(profile));
+                        return null;
+                    }
+                };
+            }
+        }.start();
+        this.profile = profile;
+        saveAsItem.setDisable(false);
+
     }
 
     private boolean updateProfile(SteamProfile profile) {
@@ -147,4 +189,6 @@ public class RootLayoutController {
         rootLayout.setCenter(genreOverview);
 
     }
+
+
 }

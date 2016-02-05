@@ -33,6 +33,6 @@ public class Game {
     }
 
     public String toString(){
-        return String.format("Game[name=%s]", name);//, genres=%s]", name, Arrays.toString(genres.toArray()));
+        return String.format("Game[name=%s], genres=%s]", name, Arrays.toString(genres.toArray()));
     }
 }

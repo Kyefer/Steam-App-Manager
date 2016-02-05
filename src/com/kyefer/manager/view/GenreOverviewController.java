@@ -89,6 +89,7 @@ public class GenreOverviewController {
         }
 
         genreTable.setItems(FXCollections.observableArrayList(validGenres));
+        genreTable.setPlaceholder(new Label("No genres to display"));
 
     }
 
