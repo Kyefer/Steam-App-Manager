@@ -11,6 +11,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * A util class for saving and loading saved profiles
+ * <p>
  * Created by Eddie on 2/5/2016.
  */
 public class ProfileIO {
@@ -20,41 +22,33 @@ public class ProfileIO {
     private static final String GAME_GENRE_DELIMINATOR = "=";
     private static final String GENRE_DELIMINATOR = "~";
 
+    /**
+     * Opens a profile file, reads and parses the content into a {@link SteamProfile} and returns it
+     *
+     * @param file the file to open
+     * @return a {@link SteamProfile} wrapping the content of the file
+     * @throws IOException if any error occurs while reading the file
+     */
     public static SteamProfile openProfile(File file) throws IOException {
-        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-            String line = br.readLine();
-            SteamProfile profile = new SteamProfile(line);
-            while ((line = br.readLine()) != null) {
-                String[] partition = line.split(GAME_GENRE_DELIMINATOR);
-                Game newGame = new Game(partition[0]);
-                for (String genre : partition[1].split(GENRE_DELIMINATOR))
-                    newGame.addGenre(genre.trim());
-                profile.addGame(newGame);
-            }
-            return profile;
+        SteamProfile profile = null;
+        try (FileInputStream fis = new FileInputStream(file)) {
+            ObjectInputStream objectInputStream = new ObjectInputStream(fis);
+            profile = (SteamProfile) objectInputStream.readObject();
+            objectInputStream.close();
+        } catch (ClassNotFoundException e) {
+            log.log(Level.SEVERE, e.getMessage());
         }
+        return profile;
     }
 
     public static void saveProfile(File file, SteamProfile profile) {
-        try {
-            file.delete();
-            file.createNewFile();
-            try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
-                bw.write(profile.getSteamID());
-                bw.newLine();
-                for (Game game : profile.getGames()) {
-                    bw.write(game.getName() + GAME_GENRE_DELIMINATOR);
-                    bw.write(String.join(GENRE_DELIMINATOR, game.getGenresNames()));
-                    bw.newLine();
-                }
-            } catch (IOException e) {
-                log.log(Level.WARNING, "Error reading from " + file.getPath());
-            }
+        try (FileOutputStream fos = new FileOutputStream(file)) {
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject(profile);
+            oos.close();
         } catch (IOException e) {
-            log.log(Level.SEVERE, file.getPath() + " could not be created/found");
+            log.log(Level.SEVERE, e.getMessage());
         }
-
-
     }
 
 }

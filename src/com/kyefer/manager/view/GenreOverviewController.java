@@ -56,18 +56,14 @@ public class GenreOverviewController {
     public void loadProfile(SteamProfile profile) {
         this.profile = profile;
         if (profile != null) {
-            minSlider.setMax(profile.getGenres().size());
-            minSlider.setMajorTickUnit(profile.getGenres().size()/4);
-            minSlider.setMinorTickCount(profile.getGenres().size()/16);
-            minSlider.setBlockIncrement(1);
-
             showGames(null);
-            profile.generateGenres();
+            minSlider.setMax(profile.getGenres().size());
             loadGenres();
         }
     }
 
     private void loadGenres() {
+
         List<Genre> validGenres = new ArrayList<>();
         List<Game> potentialNoGenreGames = new ArrayList<>();
         List<Game> hasAGenre = new ArrayList<>();

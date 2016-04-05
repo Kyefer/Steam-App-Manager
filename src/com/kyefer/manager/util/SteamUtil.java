@@ -18,6 +18,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * A util class to determine all the games that a game has
+ * <p>
  * Created by Eddie on 9/30/2015.
  */
 public class SteamUtil {
@@ -28,6 +30,12 @@ public class SteamUtil {
 
     private static final int MAX_RETRIES = 5;
 
+    /**
+     * Polls Steam's API to determine the games a {@link SteamProfile Profile} has and then scrapes steamspy.com to
+     * determine their genre by looking at user tags
+     *
+     * @param profile the profile to find the games for
+     */
     public static void loadGames(SteamProfile profile) {
 
         String gamePollURL = "http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=" + STEAM_KEY + "&steamid=" + profile.getSteamID() + "&include_appinfo=1&format=json&include_played_free_games=1";

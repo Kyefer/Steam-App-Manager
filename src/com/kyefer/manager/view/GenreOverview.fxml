@@ -40,7 +40,7 @@
                               </AnchorPane>
                               <AnchorPane maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS">
                                  <children>
-                                    <Slider fx:id="minSlider" blockIncrement="1.0" majorTickUnit="10.0" max="50.0" maxWidth="1.7976931348623157E308" onDragDropped="#onMinSliderDropped" prefHeight="24.0" prefWidth="200.0" showTickMarks="true" snapToTicks="true" AnchorPane.bottomAnchor="4.5" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="4.5" />
+                                    <Slider fx:id="minSlider" blockIncrement="1.0" majorTickUnit="50.0" max="50.0" maxWidth="1.7976931348623157E308" minorTickCount="10" onDragDropped="#onMinSliderDropped" prefHeight="24.0" prefWidth="200.0" showTickMarks="true" snapToTicks="true" AnchorPane.bottomAnchor="4.5" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="4.5" />
                                  </children>
                               </AnchorPane>
                            </children>

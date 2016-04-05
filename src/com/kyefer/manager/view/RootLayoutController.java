@@ -37,6 +37,9 @@ public class RootLayoutController {
     private Pane genreOverview;
     private Pane profileOverview;
 
+    private final String fileExtention = "*.profile";
+    private final String fileDescription = "SteamProfile files" + String.format("(%s)", fileExtention);
+
     @FXML
     public void initialize() {
 
@@ -83,7 +86,7 @@ public class RootLayoutController {
     @FXML
     public void handleOpenProfile() {
         FileChooser fileChooser = new FileChooser();
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(fileDescription, fileExtention);
         fileChooser.getExtensionFilters().add(extFilter);
         fileChooser.setTitle("Open Profile");
         fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
@@ -91,7 +94,7 @@ public class RootLayoutController {
         File file = fileChooser.showOpenDialog(rootLayout.getScene().getWindow());
         try {
             if (file != null)
-            loadProfile(ProfileIO.openProfile(file), false);
+                loadProfile(ProfileIO.openProfile(file), false);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -100,7 +103,7 @@ public class RootLayoutController {
     @FXML
     public void handelSaveAsProfile() {
         FileChooser fileChooser = new FileChooser();
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(fileDescription, fileExtention);
         fileChooser.getExtensionFilters().add(extFilter);
         fileChooser.setTitle("Save Profile");
         fileChooser.setInitialFileName(profile.getUsername());
