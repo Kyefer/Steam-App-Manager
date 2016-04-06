@@ -57,7 +57,8 @@ public class GenreOverviewController {
         this.profile = profile;
         if (profile != null) {
             showGames(null);
-            minSlider.setMax(profile.getGenres().size());
+            profile.generateGenres();
+            minSlider.setMax(profile.getGenres().size() / 2); // Arbitrary function of the size of the game List
             loadGenres();
         }
     }
@@ -67,25 +68,27 @@ public class GenreOverviewController {
         List<Genre> validGenres = new ArrayList<>();
         List<Game> potentialNoGenreGames = new ArrayList<>();
         List<Game> hasAGenre = new ArrayList<>();
-
-        for (Genre genre : profile.getGenres()) {
-            if (genre.getGames().size() >= Integer.parseInt(minLabel.getText())) {
-                validGenres.add(genre);
-                genre.getGames().forEach(hasAGenre::add);
-            } else {
-                genre.getGames().forEach(potentialNoGenreGames::add);
-            }
-        }
-
-        Genre noGenre = new Genre("NO GENRE");
-        potentialNoGenreGames.stream().filter(game -> !hasAGenre.contains(game)).forEach(noGenre::addGame);
-
-        if (noGenre.getGames().size() > 0) {
-            validGenres.add(noGenre);
-        }
-
-        genreTable.setItems(FXCollections.observableArrayList(validGenres));
         genreTable.setPlaceholder(new Label("No genres to display"));
+
+        if (profile != null) {
+            for (Genre genre : profile.getGenres()) {
+                if (genre.getGames().size() >= Integer.parseInt(minLabel.getText())) {
+                    validGenres.add(genre);
+                    genre.getGames().forEach(hasAGenre::add);
+                } else {
+                    genre.getGames().forEach(potentialNoGenreGames::add);
+                }
+            }
+
+            Genre noGenre = new Genre("NO GENRE");
+            potentialNoGenreGames.stream().filter(game -> !hasAGenre.contains(game)).forEach(noGenre::addGame);
+
+            if (noGenre.getGames().size() > 0) {
+                validGenres.add(noGenre);
+            }
+
+            genreTable.setItems(FXCollections.observableArrayList(validGenres));
+        }
 
     }
 

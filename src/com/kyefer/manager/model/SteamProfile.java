@@ -10,7 +10,7 @@ import java.util.*;
  * <p>
  * Created by Eddie on 10/7/2015.
  */
-public class SteamProfile implements Serializable{
+public class SteamProfile implements Serializable {
 
     private String steamID;
     private List<Game> games;
@@ -71,11 +71,6 @@ public class SteamProfile implements Serializable{
      */
     public void addGame(Game newGame) {
         games.add(newGame);
-        for (String genreName : newGame.getGenresNames()) {
-            genreMap.putIfAbsent(genreName, new Genre(genreName));
-            genreMap.get(genreName).addGame(newGame);
-        }
-
     }
 
     /**
@@ -94,6 +89,16 @@ public class SteamProfile implements Serializable{
      */
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public void generateGenres() {
+        for (Game game : games) {
+            for (String genreName : game.getGenresNames()) {
+                genreMap.putIfAbsent(genreName, new Genre(genreName));
+                genreMap.get(genreName).addGame(game);
+            }
+        }
+
     }
 
     public List<Genre> getGenres() {

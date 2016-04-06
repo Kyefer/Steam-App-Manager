@@ -1,7 +1,16 @@
 .background {
-    -fx-background-color: #2a3f5a;
+    -fx-background-color: #272727;
+    -fx-border-color: #272727;
 }
 
+.split-pane {
+    -fx-background-color: #272727;
+}
+
+.split-pane:horizontal > .split-pane-divider {
+    -fx-border-color: #272727;
+    -fx-background-color: derive(#272727, 25%);
+}
 
 .label, .table-row-cell {
     -fx-font-family: Motiva Sans, Arial, Helvetica, sans-serif;
@@ -17,6 +26,18 @@
     -fx-font-size: 14px;
 }
 
+/*********
+Table
+**********/
+
+.table-view {
+    -fx-base: #272727;
+    -fx-control-inner-background: #272727;
+    -fx-background-color: #272727;
+    -fx-table-cell-border-color: transparent;
+    -fx-padding: 5;
+}
+
 .table-row-cell {
     -fx-text-background-color: white;
     -fx-faint-focus-color: transparent;
@@ -27,44 +48,59 @@
 }
 
 .table-row-cell:selected {
-    -fx-background-color: derive(#2a3f5a,20%);
+    -fx-background-color: derive(#272727, 20%);
 }
 
-.table-row-cell:focused{
+.table-row-cell:focused {
     -fx-background-insets: 0;
 }
-
-.table-view {
-    -fx-base: #2a3f5a;
-    -fx-control-inner-background: #2a3f5a;
-    -fx-background-color: #2a3f5a;
-    -fx-table-cell-border-color: transparent;
-    -fx-table-header-border-color: transparent;
-    -fx-padding: 5;
+ .column-header-background, .filler {
+    -fx-border-color: transparent;
+    -fx-background-color: #272727;
 }
 
-.thumb {
-    -fx-border-radius: 3px;
-    -fx-background-color: #c6d4df;
+.slider .track {
+    -fx-background-color: derive(#272727, 35%);
 }
+
+.slider .thumb {
+    -fx-background-color: derive(#272727, -50%);
+}
+
+.progress-indicator {
+    -fx-progress-color: white;
+}
+
+/**************
+Scroll Bar
+***************/
 
 .scroll-bar {
     -fx-background-color: transparent;
 }
 
-.track {
+.thumb {
+    -fx-border-radius: 3px;
+    -fx-background-color: #313131;
 }
 
-.increment, .decrement {
-
+.increment-arrow, .decrement-arrow {
+    -fx-background-color: white;
 }
 
-.split-pane:horizontal > .split-pane-divider {
-    -fx-border-color: transparent #2a3f5a transparent #2a3f5a;
-    -fx-background-color: transparent, derive(#2a3f5a,20%);
+/*************
+Menu
+**************/
+
+.menu-bar, .context-menu {
+    -fx-background-color: derive(#272727, -35%);
 }
 
-.menu-bar .label {
-   -fx-text-fill: black;
+.menu .label {
+    -fx-text-fill: derive(white, -25%);
+}
+
+.menu:hover, .menu:focused, .menu-button:focused, .menu-item:hover {
+    -fx-background-color: derive(#272727, 25%);
 }
 
